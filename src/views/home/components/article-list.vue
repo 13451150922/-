@@ -14,11 +14,6 @@
         error-text="请求失败，点击重新加载"
         @load="onLoad"
       >
-        <!-- <van-cell
-          v-for="(article, index) in list"
-          :key="index"
-          :title="article.title"
-        /> -->
         <article-item
           v-for="(article, index) in list"
           :key="index"

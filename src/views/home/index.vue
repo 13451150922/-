@@ -1,6 +1,7 @@
 <template>
   <div class="home-container">
     <!-- 导航栏 -->
+    <!-- #1 -->
     <van-nav-bar class="page-nav-bar" fixed>
       <van-button
         class="search-btn"
@@ -22,25 +23,46 @@
         <article-list :channel="channel"></article-list>
       </van-tab>
       <div slot="nav-right" class="placeholder"></div>
-      <div slot="nav-right" class="hamburger-btn">
+      <div
+        slot="nav-right"
+        class="hamburger-btn"
+        @click="isChannelEditShow = true"
+      >
         <i class="iconfont icongengduo"></i>
       </div>
     </van-tabs>
+    <!-- 频道编辑弹出层 -->
+    <van-popup
+      v-model="isChannelEditShow"
+      closeable
+      position="bottom"
+      close-icon-position="top-left"
+      :style="{ height: '100%' }"
+    >
+      <channel-edit
+        :my-channels="channels"
+        :active="active"
+        @update-active="onUpdateActive"
+      />
+    </van-popup>
   </div>
 </template>
 
 <script>
 import { getUserChannels } from '@/api/user'
 import ArticleList from './components/article-list'
+import ChannelEdit from './components/channel-edit'
 export default {
   name: 'HomeIndex',
   components: {
-    ArticleList
+    ArticleList,
+    ChannelEdit
   },
   data() {
     return {
       active: 0,
-      channels: []
+      channels: [],
+      isChannelEditShow: false // 控制频道编辑弹出层的显示
     }
   },
   created() {
@@ -54,6 +76,10 @@ export default {
       } catch (err) {
         this.$toast('获取频道数据失败')
       }
+    },
+    onUpdateActive(index, isChannelEditShow = true) {
+      this.active = index
+      this.isChannelEditShow = isChannelEditShow // 关闭弹层
     }
   }
 }
